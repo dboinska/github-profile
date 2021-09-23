@@ -1,0 +1,71 @@
+extends ./pages/layout.pug
+include ./mixins/meta
+
+block content
+  main 
+    include ./components/navigation.pug
+    section
+      .container
+        .row.pt-5
+          .col-md-3.ms-3
+            .profile
+          //- if (!hasUser)
+          //-   p.alert.search-alert.alert-danger
+          //-     | Search Username in the Form Above
+          //- .col-md-8
+          //-   h2.hide Latest Repositories
+        if hasUser
+          // ZNALAZŁO USERA
+          console.log(user)
+          .row.pt-5 
+            .col-md-3.ms-3 
+              .profile 
+                img.img-thumbnail.rounded-circle(
+                  src=user.avatar_url,
+                  alt=user.name
+                )
+              h2 #{ user.name }
+              p #{ user.login }
+              .d-grid
+                a.btn.btn-outline-secondary(
+                  href=`https://github.com/${ user.login }`,
+                  tagret="_blank",
+                  rel="noopener"
+                ) View Profile
+                .pt-3
+                  span #{ user.followers } Followers
+                div
+                  span #{ user.following } Following
+                p #{ user.public_repos } Public Repositories
+                p.fas.fa-map-marker-alt 
+                  if user.location
+                    | #{ user.location }
+                  else
+                    | Unknown
+            .col-md-8
+              h2.text-center Latest Repositories:
+              if repos.length>0
+                .repos 
+                  each repo in repos
+                    span.repo.border.border-rounded.p3 
+                      a(
+                        href="#{repo.html_url}",
+                        target="_blank",
+                        rel="noopener"
+                      )
+                        | #{ repo.name }
+                      p.bold Stars:
+                        +meta(repo.starazers_count)
+                        |
+                        | | Watchers:
+                        +meta(repo.watchers_count)
+                        | | Forks:
+                        +meta(repo.forks_count)
+              else
+                p.alert.search-alert.alert-danger
+                  | This User doesn't have public repositories
+        else
+          // NIE MA USERA
+          p.alert.search-alert.alert-danger
+            | Search Username in the Form Above
+    include ./components/footer.pug
