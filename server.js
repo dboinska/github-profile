@@ -2,6 +2,8 @@ const path = require("path");
 const fetch = require("node-fetch");
 const express = require("express");
 const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
 
 app.set("view engine", "pug");
 
@@ -38,8 +40,8 @@ app.use((req, res) => {
   res.render("404");
 });
 
-app.listen(3000, () => {
-  console.log("Server listening on 3000");
+app.listen(process.env.PORT, process.env.IP, function () {
+  console.log(`App started at ${process.env.PORT}`);
 });
 
 const API_URL = "https://api.github.com/users/";
